@@ -1,5 +1,6 @@
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
+import { siteConfig } from "@/site.config";
 import type { Metadata } from "next";
 import { Geist_Mono, Work_Sans } from "next/font/google";
 import "./globals.css";
@@ -16,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Disease Diagnosis",
-  description: "Predicting common diseases from the symptoms and demographics",
+  title: siteConfig.name,
+  description: siteConfig.description,
 };
 
 export default function RootLayout({

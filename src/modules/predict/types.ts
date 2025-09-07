@@ -1,5 +1,3 @@
-// Types for Disease Diagnosis API
-
 export interface PatientInput {
   age_band: "0-4" | "5-14" | "15-24" | "25-44" | "45-64" | "65+";
   gender: "male" | "female";

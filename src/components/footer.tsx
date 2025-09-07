@@ -1,3 +1,5 @@
+import { siteConfig } from "@/site.config";
+
 export const Footer = () => {
   return (
     <footer className="app-container bg-muted/50 h-fit border-t py-8">
@@ -18,8 +20,8 @@ export const Footer = () => {
 
         {/* App Info */}
         <div className="text-muted-foreground text-center text-sm">
-          <p className="font-medium">Disease Diagnosis AI</p>
-          <p>AI-Powered Disease Prediction for Nigerian Healthcare</p>
+          <p className="font-medium">{siteConfig.name}</p>
+          <p>{siteConfig.description}</p>
           <p className="mt-2">
             Powered by XGBoost Machine Learning • Trained on synthetic data
           </p>

@@ -8,6 +8,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { siteConfig } from "@/site.config";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 // import { ModeToggle } from "./mode-toggle";
@@ -26,7 +27,7 @@ export const Nav = () => {
     <nav className="app-container flex h-16 items-center justify-between">
       <div className="flex items-center gap-4">
         <Link href="/">
-          <div className="text-xl font-semibold">Disease Diagnosis</div>
+          <div className="text-xl font-semibold">{siteConfig.name}</div>
         </Link>
       </div>
 
