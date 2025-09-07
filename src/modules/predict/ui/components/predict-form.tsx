@@ -27,11 +27,14 @@ import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { PatientInput } from "../../types";
+import { usePredictApi } from "../../hooks/use-predict-api";
+import { PatientInput, PredictionResponse } from "../../types";
+import { PredictionResults } from "./prediction-results";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import { CheckSquare2Icon } from "lucide-react";
-import { useMemo } from "react";
+import { AlertCircle, CheckSquare2Icon, Loader2 } from "lucide-react";
+import { useMemo, useState } from "react";
 // Form validation schema
 const predictFormSchema = z.object({
   age_band: z.enum(["0-4", "5-14", "15-24", "25-44", "45-64", "65+"]),
@@ -101,6 +104,10 @@ const symptoms = [
 ];
 
 export const PredictForm = () => {
+  const [predictionResult, setPredictionResult] =
+    useState<PredictionResponse | null>(null);
+  const { predictMutation } = usePredictApi();
+
   const form = useForm<PredictFormData>({
     resolver: zodResolver(predictFormSchema),
     defaultValues: {
@@ -127,7 +134,7 @@ export const PredictForm = () => {
     },
   });
 
-  const onSubmit = (data: PredictFormData) => {
+  const onSubmit = async (data: PredictFormData) => {
     // Convert boolean values to 0/1 for API
     const apiData: PatientInput = {
       ...data,
@@ -148,8 +155,12 @@ export const PredictForm = () => {
       dysuria: data.dysuria ? 1 : 0,
     };
 
-    console.log("Form submitted:", apiData);
-    // TODO: Integrate with prediction API
+    try {
+      const result = await predictMutation.mutateAsync(apiData);
+      setPredictionResult(result);
+    } catch (error) {
+      console.error("Prediction failed:", error);
+    }
   };
 
   const values = form.watch();
@@ -416,18 +427,57 @@ export const PredictForm = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => form.reset()}
+                  onClick={() => {
+                    form.reset();
+                    setPredictionResult(null);
+                  }}
+                  disabled={predictMutation.isPending}
                 >
                   Reset Form
                 </Button>
-                <Button type="submit" className="min-w-[120px]">
-                  Predict Disease
+                <Button
+                  type="submit"
+                  className="min-w-[120px]"
+                  disabled={predictMutation.isPending}
+                >
+                  {predictMutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Predicting...
+                    </>
+                  ) : (
+                    "Predict Disease"
+                  )}
                 </Button>
               </div>
             </form>
           </Form>
         </CardContent>
       </Card>
+
+      {/* Error Display */}
+      {predictMutation.isError && (
+        <Card className="border-destructive">
+          <CardContent className="pt-6">
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                Failed to predict disease. Please try again.
+                {predictMutation.error?.message && (
+                  <div className="mt-2 text-sm">
+                    Error: {predictMutation.error.message}
+                  </div>
+                )}
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Prediction Results */}
+      {predictionResult && (
+        <PredictionResults predictionResult={predictionResult} />
+      )}
     </div>
   );
 };
