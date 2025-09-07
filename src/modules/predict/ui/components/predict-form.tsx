@@ -501,7 +501,7 @@ export const PredictForm = ({
 
   return (
     <div className="space-y-6">
-      <Card className="p-3">
+      <Card className="p-3 sm:p-5">
         <CardHeader className="p-0">
           <CardTitle className="text-lg font-semibold">
             Disease Prediction Form
