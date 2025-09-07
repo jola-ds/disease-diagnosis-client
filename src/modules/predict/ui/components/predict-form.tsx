@@ -42,33 +42,103 @@ const predictFormSchema = z.object({
   setting: z.enum(["urban", "rural"]),
   region: z.enum(["north", "south", "east", "west", "middle_belt"]),
   season: z.enum(["dry", "rainy"]),
+
+  // General symptoms
   fever: z.boolean(),
   headache: z.boolean(),
   cough: z.boolean(),
+  chronic_cough: z.boolean(),
+  productive_cough: z.boolean(),
   fatigue: z.boolean(),
   body_ache: z.boolean(),
   chills: z.boolean(),
   sweats: z.boolean(),
+  night_sweats: z.boolean(),
+  weight_loss: z.boolean(),
+  loss_of_appetite: z.boolean(),
+
+  // GI symptoms
   nausea: z.boolean(),
   vomiting: z.boolean(),
   diarrhea: z.boolean(),
+  constipation: z.boolean(),
   abdominal_pain: z.boolean(),
-  loss_of_appetite: z.boolean(),
+  epigastric_pain: z.boolean(),
+  heartburn: z.boolean(),
+  hunger_pain: z.boolean(),
+
+  // Respiratory symptoms
   sore_throat: z.boolean(),
   runny_nose: z.boolean(),
+  chest_pain: z.boolean(),
+  shortness_of_breath: z.boolean(),
+  rapid_breathing: z.boolean(),
+  hemoptysis: z.boolean(),
+
+  // Genitourinary symptoms
   dysuria: z.boolean(),
+  polyuria: z.boolean(),
+  oliguria: z.boolean(),
+
+  // Metabolic symptoms
+  polydipsia: z.boolean(),
+  polyphagia: z.boolean(),
+  blurred_vision: z.boolean(),
+
+  // Neurological symptoms
+  dizziness: z.boolean(),
+  confusion: z.boolean(),
+
+  // Dermatological/Physical signs
+  rash: z.boolean(),
+  maculopapular_rash: z.boolean(),
+  rose_spots: z.boolean(),
+  conjunctivitis: z.boolean(),
+  lymph_nodes: z.boolean(),
+
+  // Infection-related symptoms
+  recurrent_infections: z.boolean(),
+  oral_thrush: z.boolean(),
 });
 
 type PredictFormData = z.infer<typeof predictFormSchema>;
 
 const symptoms = [
+  // General symptoms
   { id: "fever", label: "Fever", description: "Elevated body temperature" },
   { id: "headache", label: "Headache", description: "Pain in the head" },
   { id: "cough", label: "Cough", description: "Persistent coughing" },
+  {
+    id: "chronic_cough",
+    label: "Chronic Cough",
+    description: "Long-term persistent cough",
+  },
+  {
+    id: "productive_cough",
+    label: "Productive Cough",
+    description: "Cough with phlegm or mucus",
+  },
   { id: "fatigue", label: "Fatigue", description: "Extreme tiredness" },
   { id: "body_ache", label: "Body Ache", description: "General body pain" },
   { id: "chills", label: "Chills", description: "Feeling cold with shivering" },
   { id: "sweats", label: "Sweats", description: "Excessive sweating" },
+  {
+    id: "night_sweats",
+    label: "Night Sweats",
+    description: "Excessive sweating during sleep",
+  },
+  {
+    id: "weight_loss",
+    label: "Weight Loss",
+    description: "Unintended weight reduction",
+  },
+  {
+    id: "loss_of_appetite",
+    label: "Loss of Appetite",
+    description: "Reduced desire to eat",
+  },
+
+  // GI symptoms
   { id: "nausea", label: "Nausea", description: "Feeling of sickness" },
   {
     id: "vomiting",
@@ -77,15 +147,32 @@ const symptoms = [
   },
   { id: "diarrhea", label: "Diarrhea", description: "Frequent loose stools" },
   {
+    id: "constipation",
+    label: "Constipation",
+    description: "Difficulty in bowel movements",
+  },
+  {
     id: "abdominal_pain",
     label: "Abdominal Pain",
     description: "Pain in the stomach area",
   },
   {
-    id: "loss_of_appetite",
-    label: "Loss of Appetite",
-    description: "Reduced desire to eat",
+    id: "epigastric_pain",
+    label: "Epigastric Pain",
+    description: "Pain in upper abdomen",
   },
+  {
+    id: "heartburn",
+    label: "Heartburn",
+    description: "Burning sensation in chest",
+  },
+  {
+    id: "hunger_pain",
+    label: "Hunger Pain",
+    description: "Pain when stomach is empty",
+  },
+
+  // Respiratory symptoms
   {
     id: "sore_throat",
     label: "Sore Throat",
@@ -97,9 +184,81 @@ const symptoms = [
     description: "Excessive nasal discharge",
   },
   {
+    id: "chest_pain",
+    label: "Chest Pain",
+    description: "Pain in the chest area",
+  },
+  {
+    id: "shortness_of_breath",
+    label: "Shortness of Breath",
+    description: "Difficulty breathing",
+  },
+  {
+    id: "rapid_breathing",
+    label: "Rapid Breathing",
+    description: "Fast breathing rate",
+  },
+  { id: "hemoptysis", label: "Hemoptysis", description: "Coughing up blood" },
+
+  // Genitourinary symptoms
+  {
     id: "dysuria",
     label: "Dysuria",
     description: "Painful or difficult urination",
+  },
+  { id: "polyuria", label: "Polyuria", description: "Excessive urination" },
+  { id: "oliguria", label: "Oliguria", description: "Reduced urine output" },
+
+  // Metabolic symptoms
+  { id: "polydipsia", label: "Polydipsia", description: "Excessive thirst" },
+  { id: "polyphagia", label: "Polyphagia", description: "Excessive hunger" },
+  {
+    id: "blurred_vision",
+    label: "Blurred Vision",
+    description: "Unclear or fuzzy vision",
+  },
+
+  // Neurological symptoms
+  {
+    id: "dizziness",
+    label: "Dizziness",
+    description: "Feeling of lightheadedness",
+  },
+  { id: "confusion", label: "Confusion", description: "Mental disorientation" },
+
+  // Dermatological/Physical signs
+  { id: "rash", label: "Rash", description: "Skin irritation or eruption" },
+  {
+    id: "maculopapular_rash",
+    label: "Maculopapular Rash",
+    description: "Flat and raised skin lesions",
+  },
+  {
+    id: "rose_spots",
+    label: "Rose Spots",
+    description: "Small pink spots on skin",
+  },
+  {
+    id: "conjunctivitis",
+    label: "Conjunctivitis",
+    description: "Inflammation of the eye",
+  },
+  {
+    id: "lymph_nodes",
+    label: "Lymph Nodes",
+    description: "Swollen lymph nodes",
+  },
+
+  // Infection-related symptoms
+  {
+    id: "recurrent_infections",
+    label: "Recurrent Infections",
+    description: "Frequent infections",
+  },
+  {
+    id: "oral_thrush",
+    label: "Oral Thrush",
+    description: "Fungal infection in mouth",
   },
 ];
 
@@ -122,21 +281,63 @@ export const PredictForm = ({
       setting: "urban",
       region: "north",
       season: "dry",
+
+      // General symptoms
       fever: false,
       headache: false,
       cough: false,
+      chronic_cough: false,
+      productive_cough: false,
       fatigue: false,
       body_ache: false,
       chills: false,
       sweats: false,
+      night_sweats: false,
+      weight_loss: false,
+      loss_of_appetite: false,
+
+      // GI symptoms
       nausea: false,
       vomiting: false,
       diarrhea: false,
+      constipation: false,
       abdominal_pain: false,
-      loss_of_appetite: false,
+      epigastric_pain: false,
+      heartburn: false,
+      hunger_pain: false,
+
+      // Respiratory symptoms
       sore_throat: false,
       runny_nose: false,
+      chest_pain: false,
+      shortness_of_breath: false,
+      rapid_breathing: false,
+      hemoptysis: false,
+
+      // Genitourinary symptoms
       dysuria: false,
+      polyuria: false,
+      oliguria: false,
+
+      // Metabolic symptoms
+      polydipsia: false,
+      polyphagia: false,
+      blurred_vision: false,
+
+      // Neurological symptoms
+      dizziness: false,
+      confusion: false,
+
+      // Dermatological/Physical signs
+      rash: false,
+      maculopapular_rash: false,
+      rose_spots: false,
+      conjunctivitis: false,
+      lymph_nodes: false,
+
+      // Infection-related symptoms
+      recurrent_infections: false,
+      oral_thrush: false,
     },
   });
 
@@ -144,21 +345,62 @@ export const PredictForm = ({
     // Convert boolean values to 0/1 for API
     const apiData: PatientInput = {
       ...data,
+      // General symptoms
       fever: data.fever ? 1 : 0,
       headache: data.headache ? 1 : 0,
       cough: data.cough ? 1 : 0,
+      chronic_cough: data.chronic_cough ? 1 : 0,
+      productive_cough: data.productive_cough ? 1 : 0,
       fatigue: data.fatigue ? 1 : 0,
       body_ache: data.body_ache ? 1 : 0,
       chills: data.chills ? 1 : 0,
       sweats: data.sweats ? 1 : 0,
+      night_sweats: data.night_sweats ? 1 : 0,
+      weight_loss: data.weight_loss ? 1 : 0,
+      loss_of_appetite: data.loss_of_appetite ? 1 : 0,
+
+      // GI symptoms
       nausea: data.nausea ? 1 : 0,
       vomiting: data.vomiting ? 1 : 0,
       diarrhea: data.diarrhea ? 1 : 0,
+      constipation: data.constipation ? 1 : 0,
       abdominal_pain: data.abdominal_pain ? 1 : 0,
-      loss_of_appetite: data.loss_of_appetite ? 1 : 0,
+      epigastric_pain: data.epigastric_pain ? 1 : 0,
+      heartburn: data.heartburn ? 1 : 0,
+      hunger_pain: data.hunger_pain ? 1 : 0,
+
+      // Respiratory symptoms
       sore_throat: data.sore_throat ? 1 : 0,
       runny_nose: data.runny_nose ? 1 : 0,
+      chest_pain: data.chest_pain ? 1 : 0,
+      shortness_of_breath: data.shortness_of_breath ? 1 : 0,
+      rapid_breathing: data.rapid_breathing ? 1 : 0,
+      hemoptysis: data.hemoptysis ? 1 : 0,
+
+      // Genitourinary symptoms
       dysuria: data.dysuria ? 1 : 0,
+      polyuria: data.polyuria ? 1 : 0,
+      oliguria: data.oliguria ? 1 : 0,
+
+      // Metabolic symptoms
+      polydipsia: data.polydipsia ? 1 : 0,
+      polyphagia: data.polyphagia ? 1 : 0,
+      blurred_vision: data.blurred_vision ? 1 : 0,
+
+      // Neurological symptoms
+      dizziness: data.dizziness ? 1 : 0,
+      confusion: data.confusion ? 1 : 0,
+
+      // Dermatological/Physical signs
+      rash: data.rash ? 1 : 0,
+      maculopapular_rash: data.maculopapular_rash ? 1 : 0,
+      rose_spots: data.rose_spots ? 1 : 0,
+      conjunctivitis: data.conjunctivitis ? 1 : 0,
+      lymph_nodes: data.lymph_nodes ? 1 : 0,
+
+      // Infection-related symptoms
+      recurrent_infections: data.recurrent_infections ? 1 : 0,
+      oral_thrush: data.oral_thrush ? 1 : 0,
     };
 
     try {
@@ -365,18 +607,44 @@ export const PredictForm = ({
                       | "fever"
                       | "headache"
                       | "cough"
+                      | "chronic_cough"
+                      | "productive_cough"
                       | "fatigue"
                       | "body_ache"
                       | "chills"
                       | "sweats"
+                      | "night_sweats"
+                      | "weight_loss"
+                      | "loss_of_appetite"
                       | "nausea"
                       | "vomiting"
                       | "diarrhea"
+                      | "constipation"
                       | "abdominal_pain"
-                      | "loss_of_appetite"
+                      | "epigastric_pain"
+                      | "heartburn"
+                      | "hunger_pain"
                       | "sore_throat"
                       | "runny_nose"
+                      | "chest_pain"
+                      | "shortness_of_breath"
+                      | "rapid_breathing"
+                      | "hemoptysis"
                       | "dysuria"
+                      | "polyuria"
+                      | "oliguria"
+                      | "polydipsia"
+                      | "polyphagia"
+                      | "blurred_vision"
+                      | "dizziness"
+                      | "confusion"
+                      | "rash"
+                      | "maculopapular_rash"
+                      | "rose_spots"
+                      | "conjunctivitis"
+                      | "lymph_nodes"
+                      | "recurrent_infections"
+                      | "oral_thrush"
                     >;
 
                     return (

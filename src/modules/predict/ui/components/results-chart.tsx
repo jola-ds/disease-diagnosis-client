@@ -14,6 +14,7 @@ interface ResultsChartProps {
 export const ResultsChart = ({ predictionResult }: ResultsChartProps) => {
   // Prepare chart data from prediction results
   const chartData = Object.entries(predictionResult.all_probabilities)
+    .filter(([, probability]) => probability >= 0.001) // Filter out diseases with less than 0.1% probability
     .sort(([, a], [, b]) => b - a)
     .map(([disease, probability], index) => ({
       disease: disease.replace(/_/g, " ").toUpperCase(),
@@ -24,6 +25,11 @@ export const ResultsChart = ({ predictionResult }: ResultsChartProps) => {
           : `var(--chart-${(index % 5) + 1})`,
       isPredicted: disease === predictionResult.predicted_disease,
     }));
+
+  // Calculate responsive height based on number of diseases
+  const barHeight = 40; // Fixed bar height
+  const padding = 40; // Top and bottom padding
+  const chartHeight = Math.max(200, chartData.length * barHeight + padding);
 
   // Create chart configuration
   const chartConfig = {
@@ -49,7 +55,8 @@ export const ResultsChart = ({ predictionResult }: ResultsChartProps) => {
         <div className="min-w-[300px]">
           <ChartContainer
             config={chartConfig}
-            className="h-[400px] w-full min-w-[300px]"
+            className="w-full min-w-[300px]"
+            style={{ height: `${chartHeight}px` }}
           >
             <BarChart
               accessibilityLayer
@@ -83,7 +90,12 @@ export const ResultsChart = ({ predictionResult }: ResultsChartProps) => {
                 cursor={false}
                 content={<ChartTooltipContent hideLabel />}
               />
-              <Bar dataKey="probability" layout="vertical" radius={5}>
+              <Bar
+                dataKey="probability"
+                layout="vertical"
+                radius={5}
+                maxBarSize={40}
+              >
                 <LabelList
                   dataKey="probability"
                   position="right"
