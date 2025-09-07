@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const Hero = () => {
   return (
-    <header className="flex flex-col items-center justify-center space-y-10 py-36">
+    <header className="flex h-[60vh] flex-col items-center justify-center space-y-10">
       <div className="mx-auto max-w-2xl space-y-5 text-center">
         <h1 className="text-4xl font-bold">Disease Diagnosis AI</h1>
         <p className="text-muted-foreground text-lg">
