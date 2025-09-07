@@ -1,4 +1,10 @@
 import { Spinner } from "@/components/spinner";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,7 +39,7 @@ import { PatientInput, PredictionResponse } from "../../types";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import { AlertCircle, CheckSquare2Icon } from "lucide-react";
+import { AlertCircle, CheckSquare2Icon, SquareIcon } from "lucide-react";
 import { useMemo } from "react";
 // Form validation schema
 const predictFormSchema = z.object({
@@ -103,164 +109,236 @@ const predictFormSchema = z.object({
 
 type PredictFormData = z.infer<typeof predictFormSchema>;
 
-const symptoms = [
-  // General symptoms
-  { id: "fever", label: "Fever", description: "Elevated body temperature" },
-  { id: "headache", label: "Headache", description: "Pain in the head" },
-  { id: "cough", label: "Cough", description: "Persistent coughing" },
+const symptomGroups = [
   {
-    id: "chronic_cough",
-    label: "Chronic Cough",
-    description: "Long-term persistent cough",
+    id: "general",
+    title: "General Symptoms",
+    description: "Common symptoms that may indicate various conditions",
+    symptoms: [
+      { id: "fever", label: "Fever", description: "Elevated body temperature" },
+      { id: "headache", label: "Headache", description: "Pain in the head" },
+      { id: "cough", label: "Cough", description: "Persistent coughing" },
+      {
+        id: "chronic_cough",
+        label: "Chronic Cough",
+        description: "Long-term persistent cough",
+      },
+      {
+        id: "productive_cough",
+        label: "Productive Cough",
+        description: "Cough with phlegm or mucus",
+      },
+      { id: "fatigue", label: "Fatigue", description: "Extreme tiredness" },
+      { id: "body_ache", label: "Body Ache", description: "General body pain" },
+      {
+        id: "chills",
+        label: "Chills",
+        description: "Feeling cold with shivering",
+      },
+      { id: "sweats", label: "Sweats", description: "Excessive sweating" },
+      {
+        id: "night_sweats",
+        label: "Night Sweats",
+        description: "Excessive sweating during sleep",
+      },
+      {
+        id: "weight_loss",
+        label: "Weight Loss",
+        description: "Unintended weight reduction",
+      },
+      {
+        id: "loss_of_appetite",
+        label: "Loss of Appetite",
+        description: "Reduced desire to eat",
+      },
+    ],
   },
   {
-    id: "productive_cough",
-    label: "Productive Cough",
-    description: "Cough with phlegm or mucus",
-  },
-  { id: "fatigue", label: "Fatigue", description: "Extreme tiredness" },
-  { id: "body_ache", label: "Body Ache", description: "General body pain" },
-  { id: "chills", label: "Chills", description: "Feeling cold with shivering" },
-  { id: "sweats", label: "Sweats", description: "Excessive sweating" },
-  {
-    id: "night_sweats",
-    label: "Night Sweats",
-    description: "Excessive sweating during sleep",
-  },
-  {
-    id: "weight_loss",
-    label: "Weight Loss",
-    description: "Unintended weight reduction",
-  },
-  {
-    id: "loss_of_appetite",
-    label: "Loss of Appetite",
-    description: "Reduced desire to eat",
-  },
-
-  // GI symptoms
-  { id: "nausea", label: "Nausea", description: "Feeling of sickness" },
-  {
-    id: "vomiting",
-    label: "Vomiting",
-    description: "Forceful expulsion of stomach contents",
-  },
-  { id: "diarrhea", label: "Diarrhea", description: "Frequent loose stools" },
-  {
-    id: "constipation",
-    label: "Constipation",
-    description: "Difficulty in bowel movements",
-  },
-  {
-    id: "abdominal_pain",
-    label: "Abdominal Pain",
-    description: "Pain in the stomach area",
-  },
-  {
-    id: "epigastric_pain",
-    label: "Epigastric Pain",
-    description: "Pain in upper abdomen",
+    id: "gastrointestinal",
+    title: "Gastrointestinal Symptoms",
+    description: "Symptoms related to the digestive system",
+    symptoms: [
+      { id: "nausea", label: "Nausea", description: "Feeling of sickness" },
+      {
+        id: "vomiting",
+        label: "Vomiting",
+        description: "Forceful expulsion of stomach contents",
+      },
+      {
+        id: "diarrhea",
+        label: "Diarrhea",
+        description: "Frequent loose stools",
+      },
+      {
+        id: "constipation",
+        label: "Constipation",
+        description: "Difficulty in bowel movements",
+      },
+      {
+        id: "abdominal_pain",
+        label: "Abdominal Pain",
+        description: "Pain in the stomach area",
+      },
+      {
+        id: "epigastric_pain",
+        label: "Epigastric Pain",
+        description: "Pain in upper abdomen",
+      },
+      {
+        id: "heartburn",
+        label: "Heartburn",
+        description: "Burning sensation in chest",
+      },
+      {
+        id: "hunger_pain",
+        label: "Hunger Pain",
+        description: "Pain when stomach is empty",
+      },
+    ],
   },
   {
-    id: "heartburn",
-    label: "Heartburn",
-    description: "Burning sensation in chest",
+    id: "respiratory",
+    title: "Respiratory Symptoms",
+    description: "Symptoms related to breathing and the respiratory system",
+    symptoms: [
+      {
+        id: "sore_throat",
+        label: "Sore Throat",
+        description: "Pain or irritation in the throat",
+      },
+      {
+        id: "runny_nose",
+        label: "Runny Nose",
+        description: "Excessive nasal discharge",
+      },
+      {
+        id: "chest_pain",
+        label: "Chest Pain",
+        description: "Pain in the chest area",
+      },
+      {
+        id: "shortness_of_breath",
+        label: "Shortness of Breath",
+        description: "Difficulty breathing",
+      },
+      {
+        id: "rapid_breathing",
+        label: "Rapid Breathing",
+        description: "Fast breathing rate",
+      },
+      {
+        id: "hemoptysis",
+        label: "Hemoptysis",
+        description: "Coughing up blood",
+      },
+    ],
   },
   {
-    id: "hunger_pain",
-    label: "Hunger Pain",
-    description: "Pain when stomach is empty",
-  },
-
-  // Respiratory symptoms
-  {
-    id: "sore_throat",
-    label: "Sore Throat",
-    description: "Pain or irritation in the throat",
-  },
-  {
-    id: "runny_nose",
-    label: "Runny Nose",
-    description: "Excessive nasal discharge",
-  },
-  {
-    id: "chest_pain",
-    label: "Chest Pain",
-    description: "Pain in the chest area",
+    id: "genitourinary",
+    title: "Genitourinary Symptoms",
+    description: "Symptoms related to the urinary and reproductive systems",
+    symptoms: [
+      {
+        id: "dysuria",
+        label: "Dysuria",
+        description: "Painful or difficult urination",
+      },
+      { id: "polyuria", label: "Polyuria", description: "Excessive urination" },
+      {
+        id: "oliguria",
+        label: "Oliguria",
+        description: "Reduced urine output",
+      },
+    ],
   },
   {
-    id: "shortness_of_breath",
-    label: "Shortness of Breath",
-    description: "Difficulty breathing",
+    id: "metabolic",
+    title: "Metabolic Symptoms",
+    description: "Symptoms related to metabolism and blood sugar regulation",
+    symptoms: [
+      {
+        id: "polydipsia",
+        label: "Polydipsia",
+        description: "Excessive thirst",
+      },
+      {
+        id: "polyphagia",
+        label: "Polyphagia",
+        description: "Excessive hunger",
+      },
+      {
+        id: "blurred_vision",
+        label: "Blurred Vision",
+        description: "Unclear or fuzzy vision",
+      },
+    ],
   },
   {
-    id: "rapid_breathing",
-    label: "Rapid Breathing",
-    description: "Fast breathing rate",
-  },
-  { id: "hemoptysis", label: "Hemoptysis", description: "Coughing up blood" },
-
-  // Genitourinary symptoms
-  {
-    id: "dysuria",
-    label: "Dysuria",
-    description: "Painful or difficult urination",
-  },
-  { id: "polyuria", label: "Polyuria", description: "Excessive urination" },
-  { id: "oliguria", label: "Oliguria", description: "Reduced urine output" },
-
-  // Metabolic symptoms
-  { id: "polydipsia", label: "Polydipsia", description: "Excessive thirst" },
-  { id: "polyphagia", label: "Polyphagia", description: "Excessive hunger" },
-  {
-    id: "blurred_vision",
-    label: "Blurred Vision",
-    description: "Unclear or fuzzy vision",
-  },
-
-  // Neurological symptoms
-  {
-    id: "dizziness",
-    label: "Dizziness",
-    description: "Feeling of lightheadedness",
-  },
-  { id: "confusion", label: "Confusion", description: "Mental disorientation" },
-
-  // Dermatological/Physical signs
-  { id: "rash", label: "Rash", description: "Skin irritation or eruption" },
-  {
-    id: "maculopapular_rash",
-    label: "Maculopapular Rash",
-    description: "Flat and raised skin lesions",
+    id: "neurological",
+    title: "Neurological Symptoms",
+    description: "Symptoms related to the nervous system and brain function",
+    symptoms: [
+      {
+        id: "dizziness",
+        label: "Dizziness",
+        description: "Feeling of lightheadedness",
+      },
+      {
+        id: "confusion",
+        label: "Confusion",
+        description: "Mental disorientation",
+      },
+    ],
   },
   {
-    id: "rose_spots",
-    label: "Rose Spots",
-    description: "Small pink spots on skin",
+    id: "dermatological",
+    title: "Dermatological & Physical Signs",
+    description: "Visible symptoms and physical signs on the skin and body",
+    symptoms: [
+      { id: "rash", label: "Rash", description: "Skin irritation or eruption" },
+      {
+        id: "maculopapular_rash",
+        label: "Maculopapular Rash",
+        description: "Flat and raised skin lesions",
+      },
+      {
+        id: "rose_spots",
+        label: "Rose Spots",
+        description: "Small pink spots on skin",
+      },
+      {
+        id: "conjunctivitis",
+        label: "Conjunctivitis",
+        description: "Inflammation of the eye",
+      },
+      {
+        id: "lymph_nodes",
+        label: "Lymph Nodes",
+        description: "Swollen lymph nodes",
+      },
+    ],
   },
   {
-    id: "conjunctivitis",
-    label: "Conjunctivitis",
-    description: "Inflammation of the eye",
-  },
-  {
-    id: "lymph_nodes",
-    label: "Lymph Nodes",
-    description: "Swollen lymph nodes",
-  },
-
-  // Infection-related symptoms
-  {
-    id: "recurrent_infections",
-    label: "Recurrent Infections",
-    description: "Frequent infections",
-  },
-  {
-    id: "oral_thrush",
-    label: "Oral Thrush",
-    description: "Fungal infection in mouth",
+    id: "infectious",
+    title: "Infection-Related Symptoms",
+    description: "Symptoms that may indicate infectious diseases",
+    symptoms: [
+      {
+        id: "recurrent_infections",
+        label: "Recurrent Infections",
+        description: "Frequent infections",
+      },
+      {
+        id: "oral_thrush",
+        label: "Oral Thrush",
+        description: "Fungal infection in mouth",
+      },
+    ],
   },
 ];
+
+// Flatten all symptoms for the selectedSymptoms calculation
+const allSymptoms = symptomGroups.flatMap((group) => group.symptoms);
 
 interface PredictFormProps {
   onPredictionResult?: (result: PredictionResponse | null) => void;
@@ -415,7 +493,7 @@ export const PredictForm = ({
   const values = form.watch();
 
   const selectedSymptoms = useMemo(() => {
-    return symptoms.filter(
+    return allSymptoms.filter(
       (symptom) => values[symptom.id as keyof PredictFormData],
     );
   }, [values]);
@@ -600,99 +678,120 @@ export const PredictForm = ({
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 min-[360px]:grid-cols-2">
-                  {symptoms.map((symptom) => {
-                    const symptomKey = symptom.id as keyof Pick<
-                      PredictFormData,
-                      | "fever"
-                      | "headache"
-                      | "cough"
-                      | "chronic_cough"
-                      | "productive_cough"
-                      | "fatigue"
-                      | "body_ache"
-                      | "chills"
-                      | "sweats"
-                      | "night_sweats"
-                      | "weight_loss"
-                      | "loss_of_appetite"
-                      | "nausea"
-                      | "vomiting"
-                      | "diarrhea"
-                      | "constipation"
-                      | "abdominal_pain"
-                      | "epigastric_pain"
-                      | "heartburn"
-                      | "hunger_pain"
-                      | "sore_throat"
-                      | "runny_nose"
-                      | "chest_pain"
-                      | "shortness_of_breath"
-                      | "rapid_breathing"
-                      | "hemoptysis"
-                      | "dysuria"
-                      | "polyuria"
-                      | "oliguria"
-                      | "polydipsia"
-                      | "polyphagia"
-                      | "blurred_vision"
-                      | "dizziness"
-                      | "confusion"
-                      | "rash"
-                      | "maculopapular_rash"
-                      | "rose_spots"
-                      | "conjunctivitis"
-                      | "lymph_nodes"
-                      | "recurrent_infections"
-                      | "oral_thrush"
-                    >;
+                <Accordion type="multiple" className="w-full">
+                  {symptomGroups.map((group) => (
+                    <AccordionItem key={group.id} value={group.id}>
+                      <AccordionTrigger className="text-left">
+                        <div className="flex flex-col items-start">
+                          <span className="font-medium">{group.title}</span>
+                          <span className="text-muted-foreground text-sm font-normal">
+                            {group.description}
+                          </span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="grid grid-cols-1 gap-4 min-[360px]:grid-cols-2">
+                          {group.symptoms.map((symptom) => {
+                            const symptomKey = symptom.id as keyof Pick<
+                              PredictFormData,
+                              | "fever"
+                              | "headache"
+                              | "cough"
+                              | "chronic_cough"
+                              | "productive_cough"
+                              | "fatigue"
+                              | "body_ache"
+                              | "chills"
+                              | "sweats"
+                              | "night_sweats"
+                              | "weight_loss"
+                              | "loss_of_appetite"
+                              | "nausea"
+                              | "vomiting"
+                              | "diarrhea"
+                              | "constipation"
+                              | "abdominal_pain"
+                              | "epigastric_pain"
+                              | "heartburn"
+                              | "hunger_pain"
+                              | "sore_throat"
+                              | "runny_nose"
+                              | "chest_pain"
+                              | "shortness_of_breath"
+                              | "rapid_breathing"
+                              | "hemoptysis"
+                              | "dysuria"
+                              | "polyuria"
+                              | "oliguria"
+                              | "polydipsia"
+                              | "polyphagia"
+                              | "blurred_vision"
+                              | "dizziness"
+                              | "confusion"
+                              | "rash"
+                              | "maculopapular_rash"
+                              | "rose_spots"
+                              | "conjunctivitis"
+                              | "lymph_nodes"
+                              | "recurrent_infections"
+                              | "oral_thrush"
+                            >;
 
-                    return (
-                      <FormField
-                        key={symptom.id}
-                        control={form.control}
-                        name={symptomKey}
-                        render={({ field }) => {
-                          const toggleSymptom = () => {
-                            field.onChange(!field.value);
-                            // handleSymptomChange(symptom.id, !field.value);
-                          };
-                          return (
-                            <FormItem>
-                              <FormControl>
-                                <div
-                                  className={cn(
-                                    "relative flex w-full flex-row items-start space-y-0 space-x-3 rounded-md border p-4",
-                                    {
-                                      "border-primary bg-primary/3":
-                                        field.value,
-                                    },
-                                  )}
-                                  onClick={toggleSymptom}
-                                >
-                                  {field.value && (
-                                    <CheckSquare2Icon
-                                      className="absolute top-2 right-2 !m-0 size-5"
-                                      strokeWidth={1.2}
-                                    />
-                                  )}
-                                  <div className="space-y-1 leading-none">
-                                    <FormLabel className="text-sm font-medium">
-                                      {symptom.label}
-                                    </FormLabel>
-                                    <FormDescription className="text-muted-foreground text-xs">
-                                      {symptom.description}
-                                    </FormDescription>
-                                  </div>
-                                </div>
-                              </FormControl>
-                            </FormItem>
-                          );
-                        }}
-                      />
-                    );
-                  })}
-                </div>
+                            return (
+                              <FormField
+                                key={symptom.id}
+                                control={form.control}
+                                name={symptomKey}
+                                render={({ field }) => {
+                                  const toggleSymptom = () => {
+                                    field.onChange(!field.value);
+                                  };
+                                  const Icon = field.value
+                                    ? CheckSquare2Icon
+                                    : SquareIcon;
+                                  return (
+                                    <FormItem>
+                                      <FormControl>
+                                        <div
+                                          className={cn(
+                                            "relative flex w-full flex-row items-start space-y-0 space-x-3 rounded-md border p-4",
+                                            {
+                                              "border-primary bg-primary/3":
+                                                field.value,
+                                            },
+                                          )}
+                                          onClick={toggleSymptom}
+                                        >
+                                          <Icon
+                                            className={cn(
+                                              "text-muted-foreground absolute top-1.5 right-1.5 !m-0 size-5",
+                                              {
+                                                "text-primary": field.value,
+                                              },
+                                            )}
+                                            strokeWidth={1.2}
+                                          />
+                                          <div className="space-y-1 leading-none">
+                                            <FormLabel className="text-sm font-medium">
+                                              {symptom.label}
+                                            </FormLabel>
+                                            <FormDescription className="text-muted-foreground text-xs">
+                                              {symptom.description}
+                                            </FormDescription>
+                                          </div>
+                                        </div>
+                                      </FormControl>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            );
+                          })}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </div>
 
               <Separator />
