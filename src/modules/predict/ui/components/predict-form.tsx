@@ -39,8 +39,9 @@ import { PatientInput, PredictionResponse } from "../../types";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import { AlertCircle, CheckSquare2Icon, SquareIcon } from "lucide-react";
+import { AlertCircle, CheckCircleIcon, CircleIcon } from "lucide-react";
 import { useMemo } from "react";
+
 // Form validation schema
 const predictFormSchema = z.object({
   age_band: z.enum(["0-4", "5-14", "15-24", "25-44", "45-64", "65+"]),
@@ -685,7 +686,9 @@ export const PredictForm = ({
                         <div className="flex flex-col items-start">
                           <span className="font-medium">{group.title}</span>
                           <span className="text-muted-foreground text-sm font-normal">
-                            {group.symptoms.map(symptom => symptom.label).join(", ")}
+                            {group.symptoms
+                              .map((symptom) => symptom.label)
+                              .join(", ")}
                           </span>
                         </div>
                       </AccordionTrigger>
@@ -747,8 +750,8 @@ export const PredictForm = ({
                                     field.onChange(!field.value);
                                   };
                                   const Icon = field.value
-                                    ? CheckSquare2Icon
-                                    : SquareIcon;
+                                    ? CheckCircleIcon
+                                    : CircleIcon;
                                   return (
                                     <FormItem>
                                       <FormControl>
@@ -764,12 +767,12 @@ export const PredictForm = ({
                                         >
                                           <Icon
                                             className={cn(
-                                              "text-muted-foreground absolute top-1.5 right-1.5 !m-0 size-5",
+                                              "text-muted-foreground/70 absolute top-1.5 right-1.5 !m-0 size-5",
                                               {
                                                 "text-primary": field.value,
                                               },
                                             )}
-                                            strokeWidth={1.2}
+                                            strokeWidth={1}
                                           />
                                           <div className="space-y-1 leading-none">
                                             <FormLabel className="text-sm font-medium">
