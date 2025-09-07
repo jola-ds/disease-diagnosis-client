@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -41,7 +42,7 @@ const items = [
 
 export function AppSidebar() {
   const pathname = usePathname();
-
+  const { setOpenMobile } = useSidebar();
   const isMobile = useIsMobile();
 
   const isActive = (path: string) => {
@@ -51,12 +52,18 @@ export function AppSidebar() {
     return pathname.startsWith(path);
   };
 
+  const handleItemClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   if (!isMobile) return null;
 
   return (
     <Sidebar side="right">
       <SidebarContent>
-        <SidebarGroup className="mt-14">
+        <SidebarGroup className="mt-auto mb-14">
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -69,7 +76,7 @@ export function AppSidebar() {
                         "bg-sidebar-accent text-sidebar-accent-foreground",
                     )}
                   >
-                    <Link href={item.url}>
+                    <Link href={item.url} onClick={handleItemClick}>
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>

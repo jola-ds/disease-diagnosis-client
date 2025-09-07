@@ -36,7 +36,7 @@ export default function RootLayout({
             <AppSidebar />
             <main className="flex-1">
               <Nav />
-              <div className="p-4">{children}</div>
+              {children}
             </main>
           </SidebarProvider>
         </Providers>

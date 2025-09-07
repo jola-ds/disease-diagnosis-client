@@ -199,7 +199,7 @@ export const PredictForm = ({
                   <Badge variant="outline">Required</Badge>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-4 min-[360px]:grid-cols-2">
                   {/* Age Band */}
                   <FormField
                     control={form.control}
@@ -346,7 +346,7 @@ export const PredictForm = ({
               {/* Symptoms Section */}
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex flex-wrap items-center space-x-2">
                     <h3 className="text-lg font-semibold">Symptoms</h3>
                     <Badge variant="outline">Select all that apply</Badge>
                   </div>
@@ -357,7 +357,7 @@ export const PredictForm = ({
                   )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 min-[360px]:grid-cols-2">
                   {symptoms.map((symptom) => {
                     const symptomKey = symptom.id as keyof Pick<
                       PredictFormData,
@@ -429,7 +429,7 @@ export const PredictForm = ({
               <Separator />
 
               {/* Submit Button */}
-              <div className="flex justify-end space-x-4">
+              <div className="flex flex-col gap-4 min-[360px]:flex-row min-[360px]:justify-end">
                 <Button
                   type="button"
                   variant="outline"
