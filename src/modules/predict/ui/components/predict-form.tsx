@@ -29,12 +29,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { usePredictApi } from "../../hooks/use-predict-api";
 import { PatientInput, PredictionResponse } from "../../types";
-import { PredictionResults } from "./prediction-results";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 import { AlertCircle, CheckSquare2Icon, Loader2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 // Form validation schema
 const predictFormSchema = z.object({
   age_band: z.enum(["0-4", "5-14", "15-24", "25-44", "45-64", "65+"]),
@@ -103,9 +102,15 @@ const symptoms = [
   },
 ];
 
-export const PredictForm = () => {
-  const [predictionResult, setPredictionResult] =
-    useState<PredictionResponse | null>(null);
+interface PredictFormProps {
+  onPredictionResult?: (result: PredictionResponse | null) => void;
+  onReset?: () => void;
+}
+
+export const PredictForm = ({
+  onPredictionResult,
+  onReset,
+}: PredictFormProps) => {
   const { predictMutation } = usePredictApi();
 
   const form = useForm<PredictFormData>({
@@ -157,9 +162,10 @@ export const PredictForm = () => {
 
     try {
       const result = await predictMutation.mutateAsync(apiData);
-      setPredictionResult(result);
+      onPredictionResult?.(result);
     } catch (error) {
       console.error("Prediction failed:", error);
+      onPredictionResult?.(null);
     }
   };
 
@@ -172,7 +178,7 @@ export const PredictForm = () => {
   }, [values]);
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
+    <div className="space-y-6">
       <Card className="p-3">
         <CardHeader className="p-0">
           <CardTitle className="text-lg font-semibold">
@@ -429,7 +435,7 @@ export const PredictForm = () => {
                   variant="outline"
                   onClick={() => {
                     form.reset();
-                    setPredictionResult(null);
+                    onReset?.();
                   }}
                   disabled={predictMutation.isPending}
                 >
@@ -472,11 +478,6 @@ export const PredictForm = () => {
             </Alert>
           </CardContent>
         </Card>
-      )}
-
-      {/* Prediction Results */}
-      {predictionResult && (
-        <PredictionResults predictionResult={predictionResult} />
       )}
     </div>
   );

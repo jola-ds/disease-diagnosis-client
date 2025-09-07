@@ -15,7 +15,9 @@ export const Hero = () => {
           className="flex h-12 w-full rounded-full !px-5 sm:w-fit"
           asChild
         >
-          <Link href="/predict">Start Predicting</Link>
+          <Link href="/predict" prefetch>
+            Start Predicting
+          </Link>
         </Button>
       </div>
     </header>
