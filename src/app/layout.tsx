@@ -33,7 +33,7 @@ export default function RootLayout({
       >
         <Providers>
           <SidebarProvider>
-            <AppSidebar className="md:hidden" />
+            <AppSidebar />
             <main className="flex-1">
               <Nav />
               <div className="p-4">{children}</div>
