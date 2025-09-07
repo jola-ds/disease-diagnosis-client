@@ -43,14 +43,14 @@ export const PredictionResults = ({
             Disease prediction completed successfully
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6 p-0">
+        <CardContent className="space-y-6 overflow-hidden p-0">
           {/* Main Prediction Section */}
           <div className="space-y-6">
             <div className="flex items-center space-x-2">
               <h3 className="font-semibold">Prediction Summary</h3>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div className="space-y-2">
                 <h4 className="text-muted-foreground text-sm font-medium">
                   Predicted Disease

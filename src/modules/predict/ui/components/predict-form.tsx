@@ -1,3 +1,4 @@
+import { Spinner } from "@/components/spinner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +33,7 @@ import { PatientInput, PredictionResponse } from "../../types";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import { AlertCircle, CheckSquare2Icon, Loader2 } from "lucide-react";
+import { AlertCircle, CheckSquare2Icon } from "lucide-react";
 import { useMemo } from "react";
 // Form validation schema
 const predictFormSchema = z.object({
@@ -448,7 +449,7 @@ export const PredictForm = ({
                 >
                   {predictMutation.isPending ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Spinner className="size-4" />
                       Predicting...
                     </>
                   ) : (

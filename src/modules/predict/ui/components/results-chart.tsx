@@ -45,44 +45,58 @@ export const ResultsChart = ({ predictionResult }: ResultsChartProps) => {
         <h3 className="font-semibold">Disease Probabilities</h3>
       </div>
 
-      <div className="w-full overflow-hidden">
-        <ChartContainer config={chartConfig} className="h-[400px] w-full">
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout="vertical"
-            margin={{
-              left: 80,
-              right: 40,
-              top: 10,
-              bottom: 10,
-            }}
+      <div className="w-[calc(100vw-82px)] overflow-x-auto">
+        <div className="min-w-[300px]">
+          <ChartContainer
+            config={chartConfig}
+            className="h-[400px] w-full min-w-[300px]"
           >
-            <YAxis
-              dataKey="disease"
-              type="category"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
-              }
-            />
-            <XAxis dataKey="probability" type="number" hide />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar dataKey="probability" layout="vertical" radius={5}>
-              <LabelList
-                dataKey="probability"
-                position="right"
-                formatter={(value: number) => `${value.toFixed(1)}%`}
-                style={{ fontSize: "12px", fill: "var(--muted-foreground)" }}
+            <BarChart
+              accessibilityLayer
+              data={chartData}
+              layout="vertical"
+              margin={{
+                left: 60,
+                right: 40,
+                top: 20,
+                bottom: 20,
+              }}
+            >
+              <YAxis
+                dataKey="disease"
+                type="category"
+                tickLine={false}
+                tickMargin={8}
+                axisLine={false}
+                width={70}
+                tickFormatter={(value) => {
+                  const label =
+                    chartConfig[value as keyof typeof chartConfig]?.label;
+                  // Truncate long labels and add ellipsis
+                  return label && label.length > 15
+                    ? `${label.substring(0, 15)}...`
+                    : label;
+                }}
               />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+              <XAxis dataKey="probability" type="number" hide />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar dataKey="probability" layout="vertical" radius={5}>
+                <LabelList
+                  dataKey="probability"
+                  position="right"
+                  formatter={(value: number) => `${value.toFixed(1)}%`}
+                  style={{
+                    fontSize: "12px",
+                    fill: "var(--muted-foreground)",
+                  }}
+                />
+              </Bar>
+            </BarChart>
+          </ChartContainer>
+        </div>
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ export const PredictView = () => {
   };
 
   return (
-    <div className="app-container">
+    <div className="app-container h-fit">
       <div className="mx-auto max-w-2xl">
         {predictionResult ? (
           <PredictionResults
