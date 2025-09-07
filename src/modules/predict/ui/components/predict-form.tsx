@@ -112,7 +112,7 @@ type PredictFormData = z.infer<typeof predictFormSchema>;
 const symptomGroups = [
   {
     id: "general",
-    title: "General Symptoms",
+    title: "General",
     description: "Common symptoms that may indicate various conditions",
     symptoms: [
       { id: "fever", label: "Fever", description: "Elevated body temperature" },
@@ -155,7 +155,7 @@ const symptomGroups = [
   },
   {
     id: "gastrointestinal",
-    title: "Gastrointestinal Symptoms",
+    title: "Gastrointestinal",
     description: "Symptoms related to the digestive system",
     symptoms: [
       { id: "nausea", label: "Nausea", description: "Feeling of sickness" },
@@ -198,7 +198,7 @@ const symptomGroups = [
   },
   {
     id: "respiratory",
-    title: "Respiratory Symptoms",
+    title: "Respiratory",
     description: "Symptoms related to breathing and the respiratory system",
     symptoms: [
       {
@@ -235,7 +235,7 @@ const symptomGroups = [
   },
   {
     id: "genitourinary",
-    title: "Genitourinary Symptoms",
+    title: "Genitourinary",
     description: "Symptoms related to the urinary and reproductive systems",
     symptoms: [
       {
@@ -253,7 +253,7 @@ const symptomGroups = [
   },
   {
     id: "metabolic",
-    title: "Metabolic Symptoms",
+    title: "Metabolic",
     description: "Symptoms related to metabolism and blood sugar regulation",
     symptoms: [
       {
@@ -275,7 +275,7 @@ const symptomGroups = [
   },
   {
     id: "neurological",
-    title: "Neurological Symptoms",
+    title: "Neurological",
     description: "Symptoms related to the nervous system and brain function",
     symptoms: [
       {
@@ -320,7 +320,7 @@ const symptomGroups = [
   },
   {
     id: "infectious",
-    title: "Infection-Related Symptoms",
+    title: "Infection-Related",
     description: "Symptoms that may indicate infectious diseases",
     symptoms: [
       {
@@ -685,7 +685,7 @@ export const PredictForm = ({
                         <div className="flex flex-col items-start">
                           <span className="font-medium">{group.title}</span>
                           <span className="text-muted-foreground text-sm font-normal">
-                            {group.description}
+                            {group.symptoms.map(symptom => symptom.label).join(", ")}
                           </span>
                         </div>
                       </AccordionTrigger>

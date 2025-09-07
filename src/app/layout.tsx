@@ -1,7 +1,5 @@
-import { AppSidebar } from "@/components/app-sidebar";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 import { Geist_Mono, Work_Sans } from "next/font/google";
 import "./globals.css";
@@ -33,14 +31,11 @@ export default function RootLayout({
         className={`${workSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <Providers>
-          <SidebarProvider>
-            <AppSidebar />
-            <main className="flex-1">
-              <Nav />
-              {children}
-              <Footer />
-            </main>
-          </SidebarProvider>
+          <main className="flex-1">
+            <Nav />
+            {children}
+            <Footer />
+          </main>
         </Providers>
       </body>
     </html>

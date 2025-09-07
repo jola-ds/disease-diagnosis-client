@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -8,16 +7,13 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 // import { ModeToggle } from "./mode-toggle";
 
 export const Nav = () => {
   const pathname = usePathname();
-  const { toggleSidebar } = useSidebar();
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -34,8 +30,7 @@ export const Nav = () => {
         </Link>
       </div>
 
-      {/* Desktop navigation - hidden on mobile */}
-      <NavigationMenu className="hidden md:block">
+      <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuLink
@@ -59,43 +54,10 @@ export const Nav = () => {
               <Link href="/predict">Predict</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={cn(
-                navigationMenuTriggerStyle(),
-                isActive("/analysis") && "bg-accent text-accent-foreground",
-              )}
-            >
-              <Link href="/analysis">Data Analysis</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={cn(
-                navigationMenuTriggerStyle(),
-                isActive("/about") && "bg-accent text-accent-foreground",
-              )}
-            >
-              <Link href="/about">About</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
 
-      <div className="flex items-center gap-2">
-        {/* <ModeToggle /> */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-7 md:hidden"
-          onClick={toggleSidebar}
-          aria-label="Toggle Sidebar"
-        >
-          <MenuIcon className="h-4 w-4" />
-        </Button>
-      </div>
+      <div className="flex items-center gap-2">{/* <ModeToggle /> */}</div>
     </nav>
   );
 };
