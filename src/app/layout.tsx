@@ -1,4 +1,6 @@
+import { AppSidebar } from "@/components/app-sidebar";
 import { Nav } from "@/components/nav";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 import { Geist_Mono, Work_Sans } from "next/font/google";
 import "./globals.css";
@@ -30,8 +32,13 @@ export default function RootLayout({
         className={`${workSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <Providers>
-          <Nav />
-          {children}
+          <SidebarProvider>
+            <AppSidebar className="md:hidden" />
+            <main className="flex-1">
+              <Nav />
+              <div className="p-4">{children}</div>
+            </main>
+          </SidebarProvider>
         </Providers>
       </body>
     </html>
