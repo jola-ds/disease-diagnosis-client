@@ -12,6 +12,19 @@ interface ResultsChartProps {
 }
 
 export const ResultsChart = ({ predictionResult }: ResultsChartProps) => {
+  // Function to generate color variations based on primary color
+  const generateColorVariation = (index: number, total: number) => {
+    if (index === 0) {
+      return "var(--primary)"; // Highest bar gets primary color
+    }
+    
+    // Calculate opacity/intensity for other bars (decreasing from 0.8 to 0.2)
+    const intensity = Math.max(0.2, 0.8 - (index / (total - 1)) * 0.6);
+    
+    // Return primary color with reduced opacity
+    return `color-mix(in oklch, var(--primary) ${intensity * 100}%, transparent)`;
+  };
+
   // Prepare chart data from prediction results
   const chartData = Object.entries(predictionResult.all_probabilities)
     .filter(([, probability]) => probability >= 0.001) // Filter out diseases with less than 0.1% probability
@@ -19,10 +32,7 @@ export const ResultsChart = ({ predictionResult }: ResultsChartProps) => {
     .map(([disease, probability], index) => ({
       disease: disease.replace(/_/g, " ").toUpperCase(),
       probability: probability * 100,
-      fill:
-        disease === predictionResult.predicted_disease
-          ? "var(--primary)"
-          : `var(--chart-${(index % 5) + 1})`,
+      fill: generateColorVariation(index, Object.entries(predictionResult.all_probabilities).filter(([, p]) => p >= 0.001).length),
       isPredicted: disease === predictionResult.predicted_disease,
     }));
 
@@ -39,7 +49,7 @@ export const ResultsChart = ({ predictionResult }: ResultsChartProps) => {
     ...chartData.reduce((config, item, index) => {
       config[item.disease] = {
         label: item.disease,
-        color: `var(--chart-${(index % 5) + 1})`,
+        color: generateColorVariation(index, chartData.length),
       };
       return config;
     }, {} as ChartConfig),
