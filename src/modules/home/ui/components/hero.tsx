@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const Hero = () => {
   return (
@@ -12,11 +13,9 @@ export const Hero = () => {
       <div className="flex items-center gap-3">
         <Button
           className="flex h-12 w-full rounded-full !px-5 sm:w-fit"
-          // asChild
+          asChild
         >
-          {/* <Link href="/new"> */}
-          Start Predicting
-          {/* </Link> */}
+          <Link href="/predict">Start Predicting</Link>
         </Button>
       </div>
     </header>
