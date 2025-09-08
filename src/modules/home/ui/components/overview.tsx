@@ -13,13 +13,13 @@ export const Overview = () => {
     {
       icon: "🎯",
       title: "High Accuracy",
-      description: "74.6% overall accuracy with XGBoost classifier",
-      highlight: "74.6%",
+      description: "92.6% overall accuracy with XGBoost classifier",
+      highlight: "92.6%",
     },
     {
       icon: "🏥",
       title: "10 Diseases",
-      description: "Malaria, Typhoid, TB, Measles, and more",
+      description: "Malaria, Typhoid, Pneumonia, Measles, and more",
       highlight: "10+",
     },
     {
@@ -47,14 +47,14 @@ export const Overview = () => {
   const diseases = [
     "Malaria",
     "Typhoid",
-    "Tuberculosis",
-    "Measles",
-    "Cholera",
-    "Dengue",
-    "Hepatitis",
     "Pneumonia",
-    "Meningitis",
-    "Yellow Fever",
+    "Measles",
+    "Hypertension",
+    "Peptic Ulcer",
+    "Pneumonia ARI",
+    "Tuberculosis",
+    "Diabetes",
+    "HIV",
   ];
 
   return (

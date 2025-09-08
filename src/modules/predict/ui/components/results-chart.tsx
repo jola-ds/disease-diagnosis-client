@@ -17,10 +17,10 @@ export const ResultsChart = ({ predictionResult }: ResultsChartProps) => {
     if (index === 0) {
       return "var(--primary)"; // Highest bar gets primary color
     }
-    
+
     // Calculate opacity/intensity for other bars (decreasing from 0.8 to 0.2)
     const intensity = Math.max(0.2, 0.8 - (index / (total - 1)) * 0.6);
-    
+
     // Return primary color with reduced opacity
     return `color-mix(in oklch, var(--primary) ${intensity * 100}%, transparent)`;
   };
@@ -32,7 +32,12 @@ export const ResultsChart = ({ predictionResult }: ResultsChartProps) => {
     .map(([disease, probability], index) => ({
       disease: disease.replace(/_/g, " ").toUpperCase(),
       probability: probability * 100,
-      fill: generateColorVariation(index, Object.entries(predictionResult.all_probabilities).filter(([, p]) => p >= 0.001).length),
+      fill: generateColorVariation(
+        index,
+        Object.entries(predictionResult.all_probabilities).filter(
+          ([, p]) => p >= 0.001,
+        ).length,
+      ),
       isPredicted: disease === predictionResult.predicted_disease,
     }));
 
@@ -61,7 +66,7 @@ export const ResultsChart = ({ predictionResult }: ResultsChartProps) => {
         <h3 className="font-semibold">Disease Probabilities</h3>
       </div>
 
-      <div className="w-[calc(100vw-82px)] overflow-x-auto">
+      <div className="max-w-full overflow-x-auto">
         <div className="min-w-[300px]">
           <ChartContainer
             config={chartConfig}
