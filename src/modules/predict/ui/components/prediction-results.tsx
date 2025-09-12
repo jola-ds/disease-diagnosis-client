@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
 import { PredictionResponse } from "../../types";
 import { ResultsChart } from "./results-chart";
@@ -21,6 +22,9 @@ export const PredictionResults = ({
   predictionResult,
   onBack,
 }: PredictionResultsProps) => {
+  const predictionDate = new Date(`${predictionResult.timestamp}+00:00`);
+  const formattedDate = format(predictionDate, "MMM d, yyyy 'at' h:mm a");
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -116,8 +120,7 @@ export const PredictionResults = ({
 
           {/* Timestamp */}
           <div className="text-muted-foreground text-xs">
-            Prediction made at:{" "}
-            {new Date(predictionResult.timestamp).toLocaleString()}
+            Prediction made at: {formattedDate}
           </div>
         </CardContent>
       </Card>
