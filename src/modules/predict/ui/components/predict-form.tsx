@@ -47,8 +47,8 @@ const predictFormSchema = z.object({
   age_band: z.enum(["0-4", "5-14", "15-24", "25-44", "45-64", "65+"]),
   gender: z.enum(["male", "female"]),
   setting: z.enum(["urban", "rural"]),
-  region: z.enum(["north", "south", "east", "west", "middle_belt"]),
-  season: z.enum(["dry", "rainy"]),
+  region: z.enum(["north", "south", "middle_belt"]),
+  season: z.enum(["dry", "rainy", "transition"]),
 
   // General symptoms
   fever: z.boolean(),
@@ -623,8 +623,6 @@ export const PredictForm = ({
                           <SelectContent>
                             <SelectItem value="north">North</SelectItem>
                             <SelectItem value="south">South</SelectItem>
-                            <SelectItem value="east">East</SelectItem>
-                            <SelectItem value="west">West</SelectItem>
                             <SelectItem value="middle_belt">
                               Middle Belt
                             </SelectItem>
@@ -654,6 +652,9 @@ export const PredictForm = ({
                           <SelectContent>
                             <SelectItem value="dry">Dry Season</SelectItem>
                             <SelectItem value="rainy">Rainy Season</SelectItem>
+                            <SelectItem value="transition">
+                              Transition Season
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

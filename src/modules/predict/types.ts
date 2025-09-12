@@ -2,8 +2,8 @@ export interface PatientInput {
   age_band: "0-4" | "5-14" | "15-24" | "25-44" | "45-64" | "65+";
   gender: "male" | "female";
   setting: "urban" | "rural";
-  region: "north" | "south" | "east" | "west" | "middle_belt";
-  season: "dry" | "rainy";
+  region: "north" | "south" | "middle_belt";
+  season: "dry" | "rainy" | "transition";
 
   // General symptoms (binary: 0 or 1)
   fever: 0 | 1;
@@ -124,10 +124,10 @@ export type Gender = "male" | "female";
 export type Setting = "urban" | "rural";
 
 // Available regions
-export type Region = "north" | "south" | "east" | "west" | "middle_belt";
+export type Region = "north" | "south" | "middle_belt";
 
 // Available seasons
-export type Season = "dry" | "rainy";
+export type Season = "dry" | "rainy" | "transition";
 
 // Symptom type (binary)
 export type Symptom = 0 | 1;
